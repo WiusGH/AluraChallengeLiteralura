@@ -13,6 +13,7 @@ public class Autor {
     private String nombre;
     private String fechaNacimiento;
     private String fechaFallecimiento;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
     private List<Libro> libros;
 
     public long getId() {

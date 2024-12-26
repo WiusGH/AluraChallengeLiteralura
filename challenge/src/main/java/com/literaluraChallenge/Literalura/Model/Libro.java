@@ -2,6 +2,8 @@ package com.literaluraChallenge.Literalura.Model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "libro")
 public class Libro {
@@ -9,10 +11,14 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String titulo;
-    private String autor;
-    private String anio;
-    private String idioma;
+    @ElementCollection
+    @CollectionTable(name = "libro_idiomas", joinColumns = @JoinColumn(name = "libro_id"))
+    @Column(name = "idioma")
+    private List<String> idioma;
     private String numeroDescargas;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Autor autor;
 
     public String getTitulo() {
         return titulo;
@@ -30,27 +36,19 @@ public class Libro {
         this.id = id;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 
-    public String getAnio() {
-        return anio;
-    }
-
-    public void setAnio(String anio) {
-        this.anio = anio;
-    }
-
-    public String getIdioma() {
+    public List<String> getIdioma() {
         return idioma;
     }
 
-    public void setIdioma(String idioma) {
+    public void setIdioma(List<String> idioma) {
         this.idioma = idioma;
     }
 
