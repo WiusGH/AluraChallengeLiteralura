@@ -25,7 +25,7 @@ public class AutorService {
             } else if (!existingBooks.contains(newBook)) {
                 autor.setLibros(existingBooks + " - " + newBook);
             } else {
-                System.out.println("*** Este libro ya está asociado a un autor ***\n");
+                System.out.println("*** Este libro ya está asociado a un autor en la base de datos ***\n");
             }
 
         } else {

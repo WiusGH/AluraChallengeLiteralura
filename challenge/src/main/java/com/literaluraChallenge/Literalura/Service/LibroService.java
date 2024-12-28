@@ -13,7 +13,7 @@ public class LibroService {
 
     public void saveLibro(LibroDTO libroDTO) {
         if (libroRepository.existsByTitulo(libroDTO.titulo())) {
-            System.out.println("*** Un libro con el mismo título ya existe ***");
+            System.out.println("*** Un libro con el mismo título ya existe en la base de datos ***");
         } else {
             Libro libro = new Libro();
             libro.setTitulo(libroDTO.titulo());

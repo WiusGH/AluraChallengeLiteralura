@@ -58,41 +58,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 			option = scanner.nextLine();
 			switch (option) {
 				case "1": {
-					firstOption:
-					while (true) {
-						String response = options.optionOne();
-						ObjectMapper objectMapper = new ObjectMapper();
-
-						LibroDTO libroDTO = objectMapper.readValue(response, LibroDTO.class);
-						AutorDTO autorDTO = objectMapper.readValue(response, AutorDTO.class);
-
-						libroService.saveLibro(libroDTO);
-						autorService.saveAutor(autorDTO);
-
-                        System.out.println("""
-                                ¿Deseas buscar otro libro? Elige una opción:\s
-                                
-                                1- Buscar otro libro.\s
-                                2- Volver al menu principal.\s
-                                0- Salir.""");
-                        option = scanner.nextLine().toLowerCase();
-                        switch (option) {
-                            case "1": {
-                                break;
-                            }
-                            case "2": {
-                                break firstOption;
-                            }
-                            case "0":
-                            case "salir": {
-                                break mainLoop;
-                            }
-                            default: {
-                                System.out.println("Opción inválida.");
-                            }
-                        }
-                    }
-				break;
+					options.optionOne(libroService, autorService);
 				}
 				case "2": {
 					System.out.println("Opción 2 en construcción.");
