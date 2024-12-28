@@ -1,6 +1,9 @@
 package com.literaluraChallenge.Literalura;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.literaluraChallenge.Literalura.DTO.AutorDTO;
+import com.literaluraChallenge.Literalura.DTO.LibroDTO;
+import com.literaluraChallenge.Literalura.DTO.SearchResultDTO;
 import com.literaluraChallenge.Literalura.Request.Request;
 
 import java.util.List;
@@ -9,7 +12,7 @@ import java.util.Scanner;
 
 public class Options {
     Scanner scanner = new Scanner(System.in);
-    public String optionOne() {
+    public SearchResultDTO optionOne() {
         Request request = new Request();
         System.out.println("Introduce el título del libro o parte del título:");
         System.out.println("(Solo se mostrarán libros que no estén bajo protección de derechos de autor).");
@@ -18,8 +21,25 @@ public class Options {
         List<String> queryWords = List.of(words.split(" "));
         try {
             Map<String, Object> response = request.fetchFirstResult(queryWords);
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(response);
+
+            LibroDTO libroDTO = new LibroDTO(
+                    (long) response.get("id"),
+                    (String) response.get("title"),
+                    (String) response.get("author"),
+                    (String) response.get("language"),
+                    (String) response.get("download_count")
+            );
+
+            // Map response to AutorDTO
+            AutorDTO autorDTO = new AutorDTO(
+                    0,
+                    (String) response.get("author"),
+                    (String) response.get("birth_year"),
+                    (String) response.get("death_year"),
+                    (String) response.get("title")
+            );
+            SearchResultDTO searchResultDTO = new SearchResultDTO(libroDTO, autorDTO);
+
             System.out.println("******************************");
             System.out.println("Libro encontrado:");
             System.out.println("Título: " + response.get("title"));
@@ -27,7 +47,8 @@ public class Options {
             System.out.println("Idioma: " + response.get("language"));
             System.out.println("Número de Descargas: " + response.get("download_count"));
             System.out.println("******************************");
-            return jsonResponse;
+
+            return searchResultDTO;
         } catch (Exception e) {
             System.out.println("Libro no encontrado. " + e.getMessage());
             return null;

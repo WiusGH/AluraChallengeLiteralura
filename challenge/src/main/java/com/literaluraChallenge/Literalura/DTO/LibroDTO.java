@@ -1,12 +1,14 @@
 package com.literaluraChallenge.Literalura.DTO;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record LibroDTO(
         long id,
-        String titulo,
-        String autor,
-        List<String> idioma,
-        String numeroDescargas
+        @JsonAlias("title") String titulo,
+        @JsonAlias("author") String autor,
+        @JsonAlias("language") String idioma,
+        @JsonAlias("download_count") String numeroDescargas
 ) {
 }

@@ -1,0 +1,4 @@
+package com.literaluraChallenge.Literalura.DTO;
+
+public class searchResultsDTO {
+}

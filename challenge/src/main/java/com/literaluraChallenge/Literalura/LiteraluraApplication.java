@@ -1,23 +1,27 @@
 package com.literaluraChallenge.Literalura;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.literaluraChallenge.Literalura.DTO.AutorDTO;
 import com.literaluraChallenge.Literalura.DTO.LibroDTO;
 import com.literaluraChallenge.Literalura.Request.Request;
+import com.literaluraChallenge.Literalura.Service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 @SpringBootApplication
 public class LiteraluraApplication implements CommandLineRunner {
 	private final Request request;
+	private final LibroService libroService;
+	Options options = new Options();
 
 	@Autowired
-	public LiteraluraApplication(Request request) {
+	public LiteraluraApplication(Request request, LibroService libroService) {
 		this.request = request;
+		this.libroService = libroService;
 	}
 
 	public static void main(String[] args) {
@@ -29,7 +33,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		start();
 	}
 
-	public void start() {
+	public void start() throws JsonProcessingException {
 		Scanner scanner = new Scanner(System.in);
 		String option;
 		String welcomeText = """
@@ -54,54 +58,43 @@ public class LiteraluraApplication implements CommandLineRunner {
 				case "1": {
 					firstOption:
 					while (true) {
-						System.out.println("Introduce el título del libro o parte del título:");
-						System.out.println("(Solo se mostrarán libros que no estén bajo protección de derechos de autor).");
-						String words = scanner.nextLine();
-						System.out.println("Buscando libro...");
-						List<String> queryWords = List.of(words.split(" "));
+						String response = options.optionOne();
+						ObjectMapper objectMapper = new ObjectMapper();
+						String json = "{\"author\":\"Melville, Herman\",\"death_year\":\"1891\",\"language\":\"en\",\"title\":\"Moby Dick; Or, The Whale\",\"download_count\":72786,\"birth_year\":\"1819\"}";
 
-						try {
-							LibroDTO libro = request.fetchFirstResult(queryWords);
-							System.out.println("******************************");
-							System.out.println("Libro encontrado:");
-							System.out.println("ID: " + libro.id());
-							System.out.println("Título: " + libro.titulo());
-							System.out.println("Autor: " + libro.autor());
-							System.out.println("Idiomas: " + libro.idioma());
-							System.out.println("Número de Descargas: " + libro.numeroDescargas());
-							System.out.println("******************************");
-						} catch (IOException e) {
-							System.out.println(e.getMessage());
-						} catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+						// Deserialize the JSON string into DTO objects
+						LibroDTO libroDTO = objectMapper.readValue(json, LibroDTO.class);
+						AutorDTO autorDTO = objectMapper.readValue(json, AutorDTO.class);
+						libroService.saveLibro(libroDTO);
+
+//						System.out.println(libroDTO);
+//						System.out.println(autorDTO);
+//						Utilizar response para guardar entradas a la base de datos
+//						System.out.println(response);
+                        System.out.println("""
+                                ¿Deseas buscar otro libro? Elige una opción:\s
+                                
+                                1- Buscar otro libro.\s
+                                2- Volver al menu principal.\s
+                                0- Salir.""");
+                        option = scanner.nextLine().toLowerCase();
+                        switch (option) {
+                            case "1": {
+                                break;
+                            }
+                            case "2": {
+                                break firstOption;
+                            }
+                            case "0":
+                            case "salir": {
+                                break mainLoop;
+                            }
+                            default: {
+                                System.out.println("Opción inválida.");
+                            }
                         }
-                        while (true) {
-							System.out.println("""
-									¿Deseas buscar otro libro? Elige una opción:\s
-									
-									1- Buscar otro libro.\s
-									2- Volver al menu principal.\s
-									0- Salir.""");
-							option = scanner.nextLine().toLowerCase();
-							switch (option) {
-								case "1": {
-									break;
-                                }
-								case "2": {
-									break firstOption;
-								}
-								case "0":
-								case "salir": {
-                                    break mainLoop;
-                                }
-								default: {
-									System.out.println("Opción inválida.");
-								}
-							}
-							break;
-						}
-					}
-					break;
+                    }
+				break;
 				}
 				case "2": {
 					System.out.println("Opción 2 en construcción.");
