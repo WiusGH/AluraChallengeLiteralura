@@ -1,10 +1,5 @@
 package com.literaluraChallenge.Literalura;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.literaluraChallenge.Literalura.DTO.AutorDTO;
-import com.literaluraChallenge.Literalura.DTO.LibroDTO;
-import com.literaluraChallenge.Literalura.Request.Request;
-//import com.literaluraChallenge.Literalura.Service.AutorService;
 import com.literaluraChallenge.Literalura.Service.AutorService;
 import com.literaluraChallenge.Literalura.Service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +11,12 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class LiteraluraApplication implements CommandLineRunner {
-	private final LibroService libroService;
-	private final AutorService autorService;
-	Options options = new Options();
+
+	private final Options options;
 
 	@Autowired
-	public LiteraluraApplication(LibroService libroService, AutorService autorService) {
-		this.libroService = libroService;
-		this.autorService = autorService;
+	public LiteraluraApplication(Options options) {
+		this.options = options;
 	}
 
 	public static void main(String[] args) {
@@ -58,22 +51,22 @@ public class LiteraluraApplication implements CommandLineRunner {
 			option = scanner.nextLine();
 			switch (option) {
 				case "1": {
-					options.optionOne(libroService, autorService);
+					options.optionOne();
 				}
 				case "2": {
-					System.out.println("Opción 2 en construcción.");
+					options.optionTwo();
 					break;
 				}
 				case "3": {
-					System.out.println("Opción 3 en construcción.");
+					options.optionThree();
 					break;
 				}
 				case "4": {
-					System.out.println("Opción 4 en construcción.");
+					options.optionFour();
 					break;
 				}
 				case "5": {
-					System.out.println("Opción 5 en construcción.");
+					options.optionFive();
 					break;
 				}
 				case "0":

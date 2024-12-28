@@ -6,8 +6,6 @@ import com.literaluraChallenge.Literalura.Repository.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class LibroService {
     @Autowired
@@ -24,9 +22,5 @@ public class LibroService {
             libro.setNumeroDescargas(libroDTO.numeroDescargas());
             libroRepository.save(libro);
         }
-    }
-
-    public List<Libro> findAllLibros() {
-        return libroRepository.findAll();
     }
 }

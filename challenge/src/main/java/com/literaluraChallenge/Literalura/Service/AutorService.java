@@ -6,6 +6,8 @@ import com.literaluraChallenge.Literalura.Repository.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AutorService {
     @Autowired
@@ -36,5 +38,9 @@ public class AutorService {
             autor.setLibros(autorDTO.libros());
         }
         autorRepository.save(autor);
+    }
+
+    public List<Autor> findAllAutores() {
+        return autorRepository.findAll();
     }
 }
