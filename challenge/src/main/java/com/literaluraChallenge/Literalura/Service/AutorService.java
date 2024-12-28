@@ -11,17 +11,30 @@ public class AutorService {
     @Autowired
     AutorRepository autorRepository;
 
-    public Autor saveAutor(AutorDTO autorDTO) {
+    public void saveAutor(AutorDTO autorDTO) {
+        Autor autor;
         if (autorRepository.existsByNombre(autorDTO.nombre())) {
-            throw new IllegalArgumentException("Un autor con el mismo nombre ya existe.");
+            autor = (Autor) autorRepository.findByNombre(autorDTO.nombre()).orElseThrow(() ->
+                    new RuntimeException("El autor existe pero no pude ser obtenido.")
+            );
+            String existingBooks = autor.getLibros();
+            String newBook = autorDTO.libros();
+
+            if (existingBooks == null || existingBooks.isEmpty()) {
+                autor.setLibros(newBook);
+            } else if (!existingBooks.contains(newBook)) {
+                autor.setLibros(existingBooks + " - " + newBook);
+            } else {
+                System.out.println("*** Este libro ya está asociado a un autor ***\n");
+            }
+
+        } else {
+            autor = new Autor();
+            autor.setNombre(autorDTO.nombre());
+            autor.setFechaNacimiento(autorDTO.fechaNacimiento());
+            autor.setFechaFallecimiento(autorDTO.fechaFallecimiento());
+            autor.setLibros(autorDTO.libros());
         }
-
-        Autor autor = new Autor();
-        autor.setNombre(autorDTO.nombre());
-        autor.setFechaNacimiento(autorDTO.fechaNacimiento());
-        autor.setFechaFallecimiento(autorDTO.fechaFallecimiento());
-        autor.setLibros(autorDTO.libros());
-
-        return autorRepository.save(autor);
+        autorRepository.save(autor);
     }
 }

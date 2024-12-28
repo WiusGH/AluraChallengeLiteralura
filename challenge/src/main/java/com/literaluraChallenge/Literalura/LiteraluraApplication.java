@@ -69,8 +69,6 @@ public class LiteraluraApplication implements CommandLineRunner {
 						libroService.saveLibro(libroDTO);
 						autorService.saveAutor(autorDTO);
 
-						System.out.println(libroDTO);
-						System.out.println(autorDTO);
                         System.out.println("""
                                 ¿Deseas buscar otro libro? Elige una opción:\s
                                 

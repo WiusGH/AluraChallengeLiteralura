@@ -26,7 +26,7 @@ public class Options {
             System.out.println("Autor: " + response.get("author"));
             System.out.println("Idioma: " + response.get("language"));
             System.out.println("Número de Descargas: " + response.get("download_count"));
-            System.out.println("******************************");
+            System.out.println("******************************\n");
             return jsonResponse;
         } catch (Exception e) {
             System.out.println("Libro no encontrado. " + e.getMessage());

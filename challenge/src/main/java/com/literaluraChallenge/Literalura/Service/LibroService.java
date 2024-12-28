@@ -11,18 +11,16 @@ public class LibroService {
     @Autowired
     private LibroRepository libroRepository;
 
-    public Libro saveLibro(LibroDTO libroDTO) {
+    public void saveLibro(LibroDTO libroDTO) {
         if (libroRepository.existsByTitulo(libroDTO.titulo())) {
-            throw new IllegalArgumentException("Un libro con el mismo título ya existe.");
+            System.out.println("*** Un libro con el mismo título ya existe ***");
+        } else {
+            Libro libro = new Libro();
+            libro.setTitulo(libroDTO.titulo());
+            libro.setAutor(libroDTO.autor());
+            libro.setIdioma((libroDTO.idioma()));
+            libro.setNumeroDescargas(libroDTO.numeroDescargas());
+            libroRepository.save(libro);
         }
-
-        Libro libro = new Libro();
-        libro.setTitulo(libroDTO.titulo());
-        libro.setAutor(libroDTO.autor());
-        libro.setIdioma((libroDTO.idioma()));
-        libro.setNumeroDescargas(libroDTO.numeroDescargas());
-
-        return libroRepository.save(libro);
     }
-
 }
