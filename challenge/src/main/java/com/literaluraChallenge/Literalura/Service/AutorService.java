@@ -43,4 +43,11 @@ public class AutorService {
     public List<Autor> findAllAutores() {
         return autorRepository.findAll();
     }
+
+    public List<Autor> findAutoresAliveInYear(int year) {
+        return autorRepository.findAll().stream()
+                .filter(autor -> Integer.parseInt(autor.getFechaNacimiento()) <= year &&
+                        (autor.getFechaFallecimiento() == null || Integer.parseInt(autor.getFechaFallecimiento()) > year))
+                .toList();
+    }
 }

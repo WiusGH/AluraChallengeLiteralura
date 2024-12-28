@@ -37,7 +37,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 				\s
 				Elige la opción a través de un número;\s
 				1- Buscar libro por título\s
-				2- Lista libros registrados\s
+				2- Listar libros registrados\s
 				3- Listar autores registrados\s
 				4- Listar autores vivos en determinado año\s
 				5- Listar libros por idioma\s

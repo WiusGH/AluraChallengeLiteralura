@@ -122,11 +122,94 @@ public class Options {
         }
     }
 
-    public String optionFour() {
-            return null;
-        }
-        public String optionFive() {
-            return null;
+    public void optionFour() {
+        System.out.println("Introduce un año para listar autores vivos en ese año:");
+        String input = scanner.nextLine();
+
+        if (input.length() > 4 || input.isEmpty()) {
+            System.out.println("Por favor, introduce un año no mayor a 4 dígitos.");
+            return;
         }
 
-}
+        try {
+            int year = Integer.parseInt(input);
+            if (year < 0) {
+                System.out.println("Por favor, introduce un año positivo.");
+                return;
+            }
+            List<Autor> autores = autorService.findAutoresAliveInYear(year);
+
+            if (autores.isEmpty()) {
+                System.out.println("No se encontraron autores vivos en el año " + year + ".");
+            } else {
+                System.out.println("******************************");
+                System.out.println("Autores vivos en el año " + year + ":");
+                autores.forEach(autor -> {
+                    System.out.println("Nombre: " + autor.getNombre());
+                    System.out.println("Fecha de Nacimiento: " + autor.getFechaNacimiento());
+                    System.out.println("Fecha de Fallecimiento: " + (autor.getFechaFallecimiento() == null ? "Aún vivo" : autor.getFechaFallecimiento()));
+                    System.out.println("-----------------------------");
+                });
+                System.out.println("******************************\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, introduce un año válido.");
+        }
+    }
+
+    public void optionFive() {
+        while (true) {
+            System.out.println("""
+            ******************************
+            Elige un idioma para listar libros:\s
+            1- Español\s
+            2- Inglés\s
+            3- Volver al menú principal\s
+            0- Salir del programa\s
+            ******************************
+            """);
+
+            String option = scanner.nextLine().toLowerCase();
+            List<Libro> libros = null;
+
+            switch (option) {
+                case "1": {
+                    libros = libroService.listLibrosByLanguage("es");
+                    break;
+                }
+                case "2": {
+                    libros = libroService.listLibrosByLanguage("en");
+                    break;
+                }
+                case "3": {
+                    return;
+                }
+                case "0":
+                case "salir": {
+                    System.exit(0);
+                }
+                default: {
+                    System.out.println("Opción inválida. Por favor elige una opción válida.");
+                    continue;
+                }
+            }
+                if (libros != null) {
+                    if (libros.isEmpty()) {
+                        System.out.println("No hay libros registrados en la base de datos para este idioma.");
+                    } else {
+                        System.out.println("******************************");
+                        System.out.println("Lista de libros registrados:");
+                        libros.forEach(libro -> {
+                            System.out.println("Título: " + libro.getTitulo());
+                            System.out.println("Autor: " + libro.getAutor());
+                            System.out.println("Idioma: " + libro.getIdioma());
+                            System.out.println("Número de Descargas: " + libro.getNumeroDescargas());
+                            System.out.println("-----------------------------");
+                        });
+                        System.out.println("******************************\n");
+                    }
+                }
+            }
+        }
+    }
+
