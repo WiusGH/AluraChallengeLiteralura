@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.literaluraChallenge.Literalura.DTO.AutorDTO;
 import com.literaluraChallenge.Literalura.DTO.LibroDTO;
 import com.literaluraChallenge.Literalura.Request.Request;
+//import com.literaluraChallenge.Literalura.Service.AutorService;
+import com.literaluraChallenge.Literalura.Service.AutorService;
 import com.literaluraChallenge.Literalura.Service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,14 +16,14 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class LiteraluraApplication implements CommandLineRunner {
-	private final Request request;
 	private final LibroService libroService;
+	private final AutorService autorService;
 	Options options = new Options();
 
 	@Autowired
-	public LiteraluraApplication(Request request, LibroService libroService) {
-		this.request = request;
+	public LiteraluraApplication(LibroService libroService, AutorService autorService) {
 		this.libroService = libroService;
+		this.autorService = autorService;
 	}
 
 	public static void main(String[] args) {
@@ -60,17 +62,15 @@ public class LiteraluraApplication implements CommandLineRunner {
 					while (true) {
 						String response = options.optionOne();
 						ObjectMapper objectMapper = new ObjectMapper();
-						String json = "{\"author\":\"Melville, Herman\",\"death_year\":\"1891\",\"language\":\"en\",\"title\":\"Moby Dick; Or, The Whale\",\"download_count\":72786,\"birth_year\":\"1819\"}";
 
-						// Deserialize the JSON string into DTO objects
-						LibroDTO libroDTO = objectMapper.readValue(json, LibroDTO.class);
-						AutorDTO autorDTO = objectMapper.readValue(json, AutorDTO.class);
+						LibroDTO libroDTO = objectMapper.readValue(response, LibroDTO.class);
+						AutorDTO autorDTO = objectMapper.readValue(response, AutorDTO.class);
+
 						libroService.saveLibro(libroDTO);
+						autorService.saveAutor(autorDTO);
 
-//						System.out.println(libroDTO);
-//						System.out.println(autorDTO);
-//						Utilizar response para guardar entradas a la base de datos
-//						System.out.println(response);
+						System.out.println(libroDTO);
+						System.out.println(autorDTO);
                         System.out.println("""
                                 ¿Deseas buscar otro libro? Elige una opción:\s
                                 

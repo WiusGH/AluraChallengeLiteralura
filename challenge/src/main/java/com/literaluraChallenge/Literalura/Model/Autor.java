@@ -44,4 +44,12 @@ public class Autor {
     public void setFechaFallecimiento(String fechaFallecimiento) {
         this.fechaFallecimiento = fechaFallecimiento;
     }
+
+    public String getLibros() {
+        return libros;
+    }
+
+    public void setLibros(String libros) {
+        this.libros = libros;
+    }
 }
